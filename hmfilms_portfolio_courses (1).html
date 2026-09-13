@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hmfilms - Portfolio & Courses</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7', // Light cream background
+                        dark: '#111111',  // Black text
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'], // Adding a serif font for a touch of elegance
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #111111;
+        }
+
+        /* Image Comparison Slider Styles */
+        .comparison-slider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            aspect-ratio: 9/16;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+        }
+
+        .comparison-slider img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .img-before {
+            z-index: 1;
+        }
+
+        .img-after {
+            z-index: 2;
+            clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+        }
+
+        .slider-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: ew-resize;
+            z-index: 10;
+        }
+
+        .slider-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: white;
+            z-index: 3;
+            transform: translateX(-50%);
+            pointer-events: none;
+            box-shadow: 0 0 4px rgba(0,0,0,0.5);
+        }
+
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+
+        .slider-button::before,
+        .slider-button::after {
+            content: '';
+            border: 6px solid transparent;
+        }
+
+        .slider-button::before {
+            border-right-color: #111111;
+            margin-right: 2px;
+        }
+
+        .slider-button::after {
+            border-left-color: #111111;
+            margin-left: 2px;
+        }
+
+        .label {
+            position: absolute;
+            top: 1rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            z-index: 5;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .label-before {
+            right: 1rem;
+        }
+
+        .label-after {
+            left: 1rem;
+        }
+        
+        /* Custom styles for the catchy course section */
+        .course-card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            box-shadow:  20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow:  25px 25px 65px #d0d0d0, -25px -25px 65px #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-cream text-dark antialiased">
+
+    <nav class="fixed w-full bg-cream/90 backdrop-blur-md z-50 border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0 flex items-center h-full py-2">
+                    <!-- Added Logo Image -->
+                    <a href="#" class="h-full block">
+                         <img src="logo3.png" alt="HM Films Logo" class="h-full object-contain mix-blend-multiply">
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#portfolio" class="hover:text-gray-600 transition-colors px-3 py-2 rounded-md text-sm font-medium">Portfolio</a>
+                        <a href="#color-grading" class="hover:text-gray-600 transition-colors px-3 py-2 rounded-md text-sm font-medium">Color Grading</a>
+                        <a href="#courses" class="hover:text-gray-600 transition-colors px-3 py-2 rounded-md text-sm font-medium">Masterclass</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-28 pb-16">
+        <section id="portfolio" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <!-- Profile Image -->
+                <div class="w-48 h-48 md:w-64 md:h-64 flex-shrink-0 relative">
+                    <img src="https://placehold.co/400x400/eeeeee/111111?text=Your+Photo" alt="HMFILMS Profile" class="w-full h-full object-cover rounded-full shadow-lg border-4 border-white">
+                </div>
+                
+                <!-- Intro & Skills -->
+                <div class="flex-1 text-center md:text-left">
+                    <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4 tracking-tight">Hi, I'm HM Films.</h1>
+                    <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl">
+                        A passionate cinematographer and colorist dedicated to crafting visual stories. I specialize in bringing emotions to life through precise color grading and dynamic editing.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8 text-left">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                            <h3 class="font-semibold text-lg border-b border-gray-200 pb-2 mb-3">Expertise</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-center"><span class="mr-2">✨</span> Advanced Color Grading</li>
+                                <li class="flex items-center"><span class="mr-2">🎥</span> Cinematography & Lighting</li>
+                                <li class="flex items-center"><span class="mr-2">🎬</span> Professional Video Editing</li>
+                                <li class="flex items-center"><span class="mr-2">🎨</span> Visual Storytelling</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                            <h3 class="font-semibold text-lg border-b border-gray-200 pb-2 mb-3">Milestones</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-center"><span class="mr-2">🎓</span> Certified Colorist</li>
+                                <!-- Updated Qualifications -->
+                                <li class="flex items-center font-medium"><span class="mr-2 text-xl">🏆</span> 10+ Years Industry Experience</li>
+                                <li class="flex items-center font-medium"><span class="mr-2 text-xl">📸</span> 50+ Weddings Filmed & Edited</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Updated Social Links with Colors and Handles -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
+                        <a href="https://www.instagram.com/the_hmfilms?igsh=MTQ2c2VzbGZ6NGd1dg%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="flex items-center group bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 hover:shadow-md transition-all">
+                            <svg class="h-6 w-6 text-[#E1306C] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="ml-2 font-medium text-gray-800">@the_hmfilms</span>
+                        </a>
+                        <a href="https://www.youtube.com/@hm_cine_films" target="_blank" rel="noopener noreferrer" class="flex items-center group bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 hover:shadow-md transition-all">
+                            <svg class="h-6 w-6 text-[#FF0000] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd"/>
+                            </svg>
+                            <span class="ml-2 font-medium text-gray-800">@hm_cine_films</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="color-grading" class="bg-[#111111] text-white py-20 md:py-28">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-5xl font-serif font-bold mb-4">The Art of Grading</h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto text-lg">
+                        Interact with the images below. Drag the slider to reveal the transformative power of professional color grading.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                    <!-- Photo 1 -->
+                    <div class="comparison-slider">
+                        <img src="kajal1.jpeg" alt="Before Color Grading 1" class="img-before">
+                        <img src="kajal2.jpeg" alt="After Color Grading 1" class="img-after">
+                        <input type="range" min="0" max="100" value="50" class="slider-input" aria-label="Percentage of before photo shown">
+                        <div class="slider-line"></div>
+                        <div class="slider-button"></div>
+                        <div class="label label-before">RAW</div>
+                        <div class="label label-after">GRADED</div>
+                    </div>
+
+                    <!-- Photo 2 -->
+                    <div class="comparison-slider">
+                        <img src="anjali1.jpeg" alt="Before Color Grading 2" class="img-before">
+                        <img src="anjali2.jpeg" alt="After Color Grading 2" class="img-after">
+                        <input type="range" min="0" max="100" value="50" class="slider-input" aria-label="Percentage of before photo shown">
+                        <div class="slider-line"></div>
+                        <div class="slider-button"></div>
+                        <div class="label label-before">RAW</div>
+                        <div class="label label-after">GRADED</div>
+                    </div>
+
+                    <!-- Photo 3 -->
+                    <div class="comparison-slider">
+                        <img src="https://placehold.co/1920x1080/444444/ffffff?text=RAW+Photo+3" alt="Before Color Grading 3" class="img-before">
+                        <img src="https://placehold.co/1920x1080/2563eb/ffffff?text=Graded+Photo+3" alt="After Color Grading 3" class="img-after">
+                        <input type="range" min="0" max="100" value="50" class="slider-input" aria-label="Percentage of before photo shown">
+                        <div class="slider-line"></div>
+                        <div class="slider-button"></div>
+                        <div class="label label-before">RAW</div>
+                        <div class="label label-after">GRADED</div>
+                    </div>
+
+                    <!-- Photo 4 -->
+                    <div class="comparison-slider">
+                        <img src="https://placehold.co/1920x1080/444444/ffffff?text=RAW+Photo+4" alt="Before Color Grading 4" class="img-before">
+                        <img src="https://placehold.co/1920x1080/be185d/ffffff?text=Graded+Photo+4" alt="After Color Grading 4" class="img-after">
+                        <input type="range" min="0" max="100" value="50" class="slider-input" aria-label="Percentage of before photo shown">
+                        <div class="slider-line"></div>
+                        <div class="slider-button"></div>
+                        <div class="label label-before">RAW</div>
+                        <div class="label label-after">GRADED</div>
+                    </div>
+                </div>
+
+                <!-- Photo 5 (Featured/Full Width) 
+                <div class="mt-8 lg:mt-12">
+                    <div class="comparison-slider md:max-w-4xl mx-auto">
+                        <img src="https://placehold.co/1920x1080/444444/ffffff?text=Featured+RAW+Photo+5" alt="Before Color Grading 5" class="img-before">
+                        <img src="https://placehold.co/1920x1080/7c3aed/ffffff?text=Featured+Graded+Photo+5" alt="After Color Grading 5" class="img-after">
+                        <input type="range" min="0" max="100" value="50" class="slider-input" aria-label="Percentage of before photo shown">
+                        <div class="slider-line"></div>
+                        <div class="slider-button"></div>
+                        <div class="label label-before">RAW</div>
+                        <div class="label label-after">GRADED</div>
+                    </div>-->
+                </div>
+            </div>
+        </section>
+
+        <section id="courses" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative overflow-hidden">
+            <!-- Decorative background element -->
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-yellow-100 opacity-50 blur-3xl z-0"></div>
+            
+            <div class="relative z-10">
+                <div class="max-w-4xl mx-auto">
+                    <div class="course-card rounded-3xl p-8 md:p-12 border border-gray-100 relative overflow-hidden">
+                        
+                        <!-- Badge -->
+                        <div class="inline-block bg-black text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider mb-6">
+                            Next Intake Opening Soon
+                        </div>
+                        
+                        <h2 class="text-3xl md:text-5xl font-serif font-bold mb-6 leading-tight">
+                            Elevate Your Craft.<br>
+                            <span class="text-gray-500">Master the Edit.</span>
+                        </h2>
+                        
+                        <p class="text-xl text-gray-700 mb-8 max-w-2xl leading-relaxed">
+                            A comprehensive <strong class="text-black">1-Month Masterclass</strong> focusing on Wedding Cinematography, professional Video Editing, and industry-standard Color Grading techniques.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-black flex items-center justify-center text-white mr-4">
+                                    1
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Cinematography</h4>
+                                    <p class="text-gray-600 text-sm">Shooting to edit, framing emotions, and mastering event lighting.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-black flex items-center justify-center text-white mr-4">
+                                    2
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Narrative Editing</h4>
+                                    <p class="text-gray-600 text-sm">Structuring wedding films that tell a compelling love story.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-black flex items-center justify-center text-white mr-4">
+                                    3
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Color Theory</h4>
+                                    <p class="text-gray-600 text-sm">Skin tones, creating looks, and matching cameras seamlessly.</p>
+                                </div>
+                            </div>
+                             <div class="flex items-start">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-black flex items-center justify-center text-white mr-4">
+                                    4
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Business & Workflow</h4>
+                                    <p class="text-gray-600 text-sm">Efficient timelines, client delivery, and building your brand.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-center gap-4">
+                            <!-- Link this button to your registration page later -->
+                            <a href="#" class="w-full sm:w-auto text-center bg-black text-white text-lg font-semibold py-4 px-10 rounded-full hover:bg-gray-800 transform hover:scale-105 transition-all duration-300 shadow-xl">
+                                Register Your Interest
+                            </a>
+                            <span class="text-sm text-gray-500 font-medium">*Limited to 10 students per batch for personalized attention.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#111111] text-white py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0 h-12">
+                 <img src="Screenshot 2026-08-19 143746.jpg" alt="HM Films Logo" class="h-full object-contain filter invert brightness-0">
+            </div>
+            <div class="text-gray-500 text-sm">
+                &copy; 2026 hmfilms. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select all slider containers
+            const sliders = document.querySelectorAll('.comparison-slider');
+
+            sliders.forEach(sliderContainer => {
+                const sliderInput = sliderContainer.querySelector('.slider-input');
+                const imgAfter = sliderContainer.querySelector('.img-after');
+                const sliderLine = sliderContainer.querySelector('.slider-line');
+                const sliderButton = sliderContainer.querySelector('.slider-button');
+
+                // Function to update the slider position for a specific container
+                function updateSlider(value) {
+                    imgAfter.style.clipPath = `polygon(0 0, ${value}% 0, ${value}% 100%, 0 100%)`;
+                    sliderLine.style.left = `${value}%`;
+                    sliderButton.style.left = `${value}%`;
+                }
+
+                // Listen for input changes on the specific range slider
+                sliderInput.addEventListener('input', (e) => {
+                    updateSlider(e.target.value);
+                });
+
+                // Initialize position
+                updateSlider(sliderInput.value);
+            });
+        });
+    </script>
+</body>
+</html>
